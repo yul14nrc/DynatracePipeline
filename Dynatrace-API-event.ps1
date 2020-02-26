@@ -58,7 +58,7 @@ Write-Host "CI_BACKLINK           : "$CI_BACKLINK
 Write-Host ""
 Write-Host "DYNATRACE_API_URL     : "$DYNATRACE_API_URL
 Write-Host "TAG_VALUE_ENVIRONMENT : "$TAG_VALUE_ENVIRONMENT
-Write-Host "TAG_VALUE_SERVICE     : "$TAG_VALUE_SERVICE
+#Write-Host "TAG_VALUE_SERVICE     : "$TAG_VALUE_SERVICE
 Write-Host "REQUEST_BODY          : "$REQUEST_BODY
 Write-Host "==============================================================="
 Write-Host "Calling Dynatrace Event API..."
