@@ -14,7 +14,7 @@ $DYNATRACE_API_TOKEN=$Args[1]
 # set the data for the API call
 # adjust the number of tags in the JSON below and tag variables values
 $TAG_VALUE_ENVIRONMENT=$Args[2]
-$TAG_VALUE_SERVICE=$Args[3]
+#$TAG_VALUE_SERVICE=$Args[3]
 
 # set values that are passes as Dyntrace event context
 # you can adjust these as you see fit
@@ -40,13 +40,7 @@ $REQUEST_BODY=@"
                     "tags" : [
                         {
                             "context" : "CONTEXTLESS",
-                            "key": "environment",
-                            "value" : "$TAG_VALUE_ENVIRONMENT"    
-                        },
-                        {
-                            "context" : "CONTEXTLESS",
-                            "key": "service",
-                            "value" : "$TAG_VALUE_SERVICE"    
+                            "key": "$TAG_VALUE_ENVIRONMENT"   
                         }
                         ]
                 }
