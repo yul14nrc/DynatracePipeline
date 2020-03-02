@@ -22,7 +22,7 @@ AZ_RELEASE_TEAM_PROJECT="$5"
 AZ_RELEASE_URL="$6"
 
 ENVIONMENT_TAG="$7"
-#SERVICE_TAG="$8"
+APP_TAG="$8"
 
 echo "================================================================="
 echo "Dynatrace Deployment event:"
@@ -35,7 +35,7 @@ echo "AZ_RELEASE_ID              = $AZ_RELEASE_ID"
 echo "AZ_RELEASE_TEAM_PROJECT    = $AZ_RELEASE_TEAM_PROJECT"
 echo "AZ_RELEASE_URL             = $AZ_RELEASE_URL"
 echo "ENVIONMENT_TAG             = $ENVIONMENT_TAG"
-echo "SERVICE_TAG                = $SERVICE_TAG"
+echo "APP_TAG                    = $APP_TAG"
 echo "================================================================="
 POST_DATA=$(cat <<EOF
     {
@@ -53,6 +53,10 @@ POST_DATA=$(cat <<EOF
                             {
                                 "context" : "CONTEXTLESS",
                                 "key": "$ENVIONMENT_TAG"    
+                            },
+                            {
+                                "context" : "CONTEXTLESS",
+                                "key": "$APP_TAG"    
                             }
                             ]
                    }
