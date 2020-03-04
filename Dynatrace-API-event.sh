@@ -1,14 +1,4 @@
 # Unix Shell script to send an create Dynatrace deployment API call 
-# Assumes that will tag entities with an "environment" and "service" TAG
-# arguments
-# $1 = dynatrace-base-url, eg. http://<tenant>.live.dynatrace.com
-# $2 = dynatrace-api-token
-# $3 = release name that shows up in the dyntrace event
-# $4 = dynatrace-api-token
-# $5 = dynatrace-api-token
-# $6 = dynatrace-api-token
-# $7 = tag-value-environment
-# $8 = tag-value-service
 # in AzureDev Ops pilelines can use built in environment variables
 # "$(dynatrace-base-url)" "$(dynatrace-api-token)" $(Build.DefinitionName) $(app-problem-number) $(System.TeamProject) $(System.TeamFoundationCollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)' TagEnvironment TagService
 
@@ -21,15 +11,8 @@ AZ_RELEASE_ID="$4"
 AZ_RELEASE_TEAM_PROJECT="$5"
 AZ_RELEASE_URL="$6"
 
-ENVIONMENT_TAG="$7"
-APP_TAG="$8"
-TMP="$9"
+TMP="$7"
 TAG_STRUCTURE=$(echo $TMP|jq '.')
-
-echo "este es el contenido de system project"
-echo $(System.TeamProject)
-echo ${System.TeamProject}
-echo $System.TeamProject
 
 echo "================================================================="
 echo "Dynatrace Deployment event:"
@@ -41,8 +24,7 @@ echo "AZ_RELEASE_DEFINITION_NAME = $AZ_RELEASE_DEFINITION_NAME"
 echo "AZ_RELEASE_ID              = $AZ_RELEASE_ID"
 echo "AZ_RELEASE_TEAM_PROJECT    = $AZ_RELEASE_TEAM_PROJECT"
 echo "AZ_RELEASE_URL             = $AZ_RELEASE_URL"
-echo "ENVIONMENT_TAG             = $ENVIONMENT_TAG"
-echo "APP_TAG                    = $APP_TAG"
+echo "TAG_STRUCTURE              = $TMP"
 echo "================================================================="
 POST_DATA=$(cat <<EOF
     {
@@ -64,4 +46,4 @@ POST_DATA=$(cat <<EOF
 EOF
 )
 echo $POST_DATA
-curl --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
+curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
