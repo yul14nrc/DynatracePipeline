@@ -15,6 +15,9 @@ stage=${10}           # e.g. staging
 
 TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
+AZ_RELEASE_DEFINITION_NAME=${11}
+AZ_RELEASE_NAME=${12}
+
 echo ""
 echo "================================================================="
 echo "Keptn Quality Gate:"
@@ -93,8 +96,8 @@ echo ""
 POST_DATA=$(cat <<EOF
     {
         "eventType" : "CUSTOM_INFO",
-        "description" : "Quality gate result for release ...",
-        "title" : "Quality Gate Result",
+        "description" : "Quality gate result for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
+        "title" : "Quality Gate Result $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
         "source" : "Keptn" ,
         "attachRules" : {
                "tagRule" : [
