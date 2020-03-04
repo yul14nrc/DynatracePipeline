@@ -50,7 +50,7 @@ POST_DATA=$(cat <<EOF
                "tagRule" : [
                    {
                         "meTypes":"SERVICE" ,
-                        "$TAG_STRUCTURE"
+                        "tags" : "$TAG_STRUCTURE"
                    }
                    ]
         }
