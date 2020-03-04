@@ -23,6 +23,7 @@ AZ_RELEASE_URL="$6"
 
 ENVIONMENT_TAG="$7"
 APP_TAG="$8"
+TAG_STRUCTURE="$9"
 
 echo "================================================================="
 echo "Dynatrace Deployment event:"
@@ -49,16 +50,7 @@ POST_DATA=$(cat <<EOF
                "tagRule" : [
                    {
                         "meTypes":"SERVICE" ,
-                        "tags" : [
-                            {
-                                "context" : "CONTEXTLESS",
-                                "key": "$ENVIONMENT_TAG"    
-                            },
-                            {
-                                "context" : "CONTEXTLESS",
-                                "key": "$APP_TAG"    
-                            }
-                            ]
+                        "$TAG_STRUCTURE"
                    }
                    ]
         }
