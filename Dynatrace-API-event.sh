@@ -7,7 +7,7 @@ DYNATRACE_API_TOKEN="$2"
 DYNATRACE_API_URL="$1/api/v1/events"
 
 AZ_RELEASE_DEFINITION_NAME="$3"
-AZ_RELEASE_ID="$4"
+AZ_RELEASE_NAME="$4"
 AZ_RELEASE_TEAM_PROJECT="$5"
 AZ_RELEASE_URL="$6"
 
@@ -21,7 +21,7 @@ echo "DYNATRACE_BASE_URL         = $DYNATRACE_BASE_URL"
 echo "DYNATRACE_API_URL          = $DYNATRACE_API_URL"
 echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
 echo "AZ_RELEASE_DEFINITION_NAME = $AZ_RELEASE_DEFINITION_NAME"
-echo "AZ_RELEASE_ID              = $AZ_RELEASE_ID"
+echo "AZ_RELEASE_NAME            = $AZ_RELEASE_NAME"
 echo "AZ_RELEASE_TEAM_PROJECT    = $AZ_RELEASE_TEAM_PROJECT"
 echo "AZ_RELEASE_URL             = $AZ_RELEASE_URL"
 echo "TAG_STRUCTURE              = $TMP"
@@ -30,8 +30,8 @@ POST_DATA=$(cat <<EOF
     {
         "eventType" : "CUSTOM_DEPLOYMENT",
         "source" : "AzureDevops" ,
-        "deploymentName" : "$AZ_RELEASE_DEFINITION_NAME",
-        "deploymentVersion" : "$AZ_RELEASE_ID"  ,
+        "deploymentName" : "$AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
+        "deploymentVersion" : "$AZ_RELEASE_NAME"  ,
         "deploymentProject" : "$AZ_RELEASE_TEAM_PROJECT" ,
         "ciBackLink" : "$AZ_RELEASE_URL",
         "attachRules" : {
