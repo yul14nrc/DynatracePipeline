@@ -11,7 +11,7 @@ start=$6              # e.g. 2019-11-21T11:00:00.000Z
 end=$7                # e.g. 2019-11-21T11:00:10.000Z
 project=$8            # e.g. keptnorders
 service=$9            # e.g. frontend
-stage=$10              # e.g. staging
+stage=${10}           # e.g. staging
 
 TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
