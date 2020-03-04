@@ -26,8 +26,10 @@ APP_TAG="$8"
 TMP="$9"
 TAG_STRUCTURE=$(echo $TMP|jq '.')
 
-echo "este es el contenido de tag_structure"
-echo "$TAG_STRUCTURE"
+echo "este es el contenido de system project"
+echo $(System.TeamProject)
+echo ${System.TeamProject}
+echo $System.TeamProject
 
 echo "================================================================="
 echo "Dynatrace Deployment event:"
