@@ -1,15 +1,19 @@
 #Script that sends start evaluation to keptn and loops until evaluation it's done. Later sends custom info event to dynatrace service with the details of the quality gate result.
 
-keptnApiUrl=$1        # e.g. https://api.keptn.<YOUR VALUE>.xip.io
-keptnApiToken=$2
-DYNATRACE_BASE_URL="$3"
-DYNATRACE_API_TOKEN="$4"
-DYNATRACE_API_URL="$3/api/v1/events"
-start=$5              # e.g. 2019-11-21T11:00:00.000Z
-end=$6                # e.g. 2019-11-21T11:00:10.000Z
-project=$7            # e.g. keptnorders
-service=$8            # e.g. frontend
-stage=$9              # e.g. staging
+DYNATRACE_BASE_URL="$1"
+DYNATRACE_API_TOKEN="$2"
+DYNATRACE_API_URL="$1/api/v1/events"
+
+keptnApiUrl=$3        # e.g. https://api.keptn.<YOUR VALUE>.xip.io
+keptnApiToken=$4
+TmpTagStructure=$5
+start=$6              # e.g. 2019-11-21T11:00:00.000Z
+end=$7                # e.g. 2019-11-21T11:00:10.000Z
+project=$8            # e.g. keptnorders
+service=$9            # e.g. frontend
+stage=$10              # e.g. staging
+
+TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
 echo ""
 echo "================================================================="
@@ -38,6 +42,44 @@ POST_DATA=$(cat <<EOF
 }
 EOF
 )
+
+echo "Sending start Keptn Evaluation"
+ctxid=$(curl -s -k -X POST --url "${keptnApiUrl}/v1/event" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
+echo "keptnContext ID = $ctxid"
+echo ""
+
+loops=20
+i=0
+while [ $i -lt $loops ]
+do
+    i=`expr $i + 1`
+    result=$(curl -s -k -X GET "${keptnApiUrl}/v1/event?keptnContext=${ctxid}&type=sh.keptn.events.evaluation-done" -H "accept: application/json" -H "x-token: ${keptnApiToken}")
+    status=$(echo $result|jq -r ".data.evaluationdetails.result")
+    score=$(echo $result|jq -r ".data.evaluationdetails.score")
+    if [ "$status" = "null" ]; then
+      echo "Waiting for results (attempt $i of 20)..."
+      sleep 15
+    else
+      break
+    fi
+done
+
+echo "================================================================="
+echo "Evaluation Status = ${status}"
+echo "Evaluation Score = ${score}%"
+echo "Evaluation Result = $(echo $result|jq -r ".data.evaluationdetails")"
+echo "================================================================="
+echo ""
+if [ "$status" = "pass" ]; then
+        echo "Keptn Quality Gate - Evaluation Succeeded"
+else
+        echo "Keptn Quality Gate - Evaluation failed!"
+        echo "For details visit the Keptn Bridge!"
+        echo ""
+        exit 1
+fi
+echo ""
+
 echo "================================================================="
 echo "Dynatrace Custom Info Event:"
 echo ""
@@ -58,20 +100,11 @@ POST_DATA=$(cat <<EOF
                "tagRule" : [
                    {
                         "meTypes":"SERVICE",
-                        "tags" : [
-                            {
-                                "context" : "CONTEXTLESS",
-                                "key": "$stage"
-                            },
-                            {
-                                    "context" : "CONTEXTLESS",
-                                    "key": "$service"
-                            }
-                                                                  ]
+                        "tags" : $TAG_STRUCTURE
                    }
                    ]
         },"customProperties" :
-                {        "Keptn Bridge" : "https://bridge.keptn.35.238.204.253.xip.io/project/carnival",
+                {        "Keptn Bridge" : "https://bridge.keptn.35.238.204.253.xip.io/project/$project",
                          "Keptn Context" : "${ctxid}",
                          "Status" : "${status^}",
                          "Score" : "$score%" }
