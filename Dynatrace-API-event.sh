@@ -12,7 +12,7 @@
 # in AzureDev Ops pilelines can use built in environment variables
 # "$(dynatrace-base-url)" "$(dynatrace-api-token)" $(Build.DefinitionName) $(app-problem-number) $(System.TeamProject) $(System.TeamFoundationCollectionUri)/$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)' TagEnvironment TagService
 
-sudo apt-get install jq
+apt-get install jq
 
 DYNATRACE_BASE_URL="$1"
 DYNATRACE_API_TOKEN="$2"
