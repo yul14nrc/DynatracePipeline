@@ -5,7 +5,7 @@ wget --no-check-certificate --no-verbose -O scommand.zip $sc_zip_url
 unzip ./scommand.zip
 
 #Obtain the current time and converts to UTC to set the start load test variable
-start_test=date -u "+%s"
+start_test=$(date -u "+%s")
 
 #Send the custom annotation event to dynatrace
 DYNATRACE_BASE_URL="$1"
@@ -24,6 +24,7 @@ echo "DYNATRACE_API_URL          = $DYNATRACE_API_URL"
 echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
 echo "TAG_STRUCTURE              = $TMP_TAG_STRUCTURE"
 echo "SCRIPT                     = $SCRIPT"
+echo "START LOAD TEST            = $start_test"
 echo "================================================================="
 echo ""
 POST_DATA=$(cat <<EOF
