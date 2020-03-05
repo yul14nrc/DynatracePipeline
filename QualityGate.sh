@@ -50,6 +50,13 @@ echo "Sending start Keptn Evaluation"
 ctxid=$(curl -s -k -X POST --url "${keptnApiUrl}/v1/event" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
 echo "keptnContext ID = $ctxid"
 echo ""
+if [ -z "$ctxid" ]
+then
+        echo "keptnContext ID is empty. There is a problem with the start evaluation curl command"
+        exit 1
+else
+        echo "keptnContext ID is not empty"
+fi
 
 loops=20
 i=0
@@ -60,7 +67,7 @@ do
     status=$(echo $result|jq -r ".data.evaluationdetails.result")
     score=$(echo $result|jq -r ".data.evaluationdetails.score")
     if [ "$status" = "null" ]; then
-      echo "Waiting for results (attempt $i of 20)..."
+      echo "Waiting results (attempt $i of 20) for KeptnContext ID $ctxid..."
       sleep 15
     else
       break
@@ -76,10 +83,9 @@ echo ""
 if [ "$status" = "pass" ]; then
         echo "Keptn Quality Gate - Evaluation Succeeded"
 else
-        echo "Keptn Quality Gate - Evaluation failed!"
-        echo "For details visit the Keptn Bridge!"
+        echo "Keptn Quality Gate - Evaluation failed"
+        echo "For details visit the Keptn Bridge"
         echo ""
-        exit 1
 fi
 echo ""
 
