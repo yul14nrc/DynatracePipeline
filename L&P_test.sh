@@ -42,7 +42,7 @@ POST_DATA=$(cat <<EOF
                 }
                 ]
                 },"customProperties" :
-                {        "Script Path" : "$SCRIPT",
+                {        "Script Path" : "$SCRIPT"
                     }
     }
 EOF
