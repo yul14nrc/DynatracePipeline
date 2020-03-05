@@ -1,4 +1,5 @@
 $DIR = "PS"
+$SC_ZIP_URL = "https://ec2-18-235-65-145.compute-1.amazonaws.com/concerto/downloads/scommand/scommand.zip"
 
 if (Test-Path C:\$DIR -PathType Container)
 {
@@ -52,7 +53,7 @@ $certCallback = @"
  }
 [ServerCertificateValidationCallback]::Ignore()
 
-Invoke-WebRequest "https://ec2-18-235-65-145.compute-1.amazonaws.com/concerto/downloads/scommand/scommand.zip" -OutFile "C:\$DIR\scommand.zip"
+Invoke-WebRequest "$SC_ZIP_URL" -OutFile "C:\$DIR\scommand.zip"
 Expand-Archive -LiteralPath C:\$DIR\scommand.zip -DestinationPath C:\$DIR\
 cd C:\$DIR\scommand\bin
 ECHO "FILES DOWNLOADED....."
