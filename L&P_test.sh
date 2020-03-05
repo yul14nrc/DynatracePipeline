@@ -33,7 +33,6 @@ POST_DATA=$(cat <<EOF
         "annotationType" : "L&P TEST START",
         "annotationDescription": "L&P TEST START",
         "source" : "$cloudtest_url",
-        "start" : "$start_test",
         "attachRules" : {
             "tagRule" : [
                 {
@@ -42,7 +41,8 @@ POST_DATA=$(cat <<EOF
                 }
                 ]
                 },"customProperties" :
-                {        "Script Path" : "$SCRIPT"
+                {        "Script Path" : "$SCRIPT",
+                         "Start Load Test" : "$start_test"
                     }
     }
 EOF
