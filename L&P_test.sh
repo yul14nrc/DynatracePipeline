@@ -5,7 +5,7 @@ wget --no-check-certificate --no-verbose -O scommand.zip $sc_zip_url
 unzip ./scommand.zip
 
 #Obtain the current time and converts to UTC to set the start load test variable
-
+start_test=date --utc +%s
 
 #Send the custom annotation event to dynatrace
 DYNATRACE_BASE_URL="$1"
@@ -30,21 +30,18 @@ POST_DATA=$(cat <<EOF
         "eventType" : "CUSTOM_ANNOTATION",
         "annotationType" : "L&P TEST START",
         "annotationDescription": "L&P TEST START",
-        "source" : "$SOURCE",
-        "start" : "",
+        "source" : "$cloudtest_url",
+        "start" : "$start_test",
         "attachRules" : {
             "tagRule" : [
                 {
                     "meTypes":"SERVICE" ,
-                    "tags" : [
-                        {
-                            "context" : "CONTEXTLESS",
-                            "key": $TAG_STRUCTURE   
-                        }
-                        ]
+                    "tags" :  $TAG_STRUCTURE
                 }
                 ]
-    }
+                },"customProperties" :
+                {        "Script Path" : "$SCRIPT",
+                    }
     }
 EOF
 )
