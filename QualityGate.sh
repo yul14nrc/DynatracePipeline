@@ -1,5 +1,11 @@
 #Script that sends start evaluation to keptn and loops until evaluation it's done. Later sends custom info event to dynatrace service with the details of the quality gate result.
 
+start_test_utc=$(cat $(Pipeline.Workspace)/variables/start_test)
+echo "$start_test_utc"
+
+end_test_utc=$(cat $(Pipeline.Workspace)/variables/end_test)
+echo "$end_test_utc"
+
 DYNATRACE_BASE_URL="$1"
 DYNATRACE_API_TOKEN="$2"
 DYNATRACE_API_URL="$1/api/v1/events"
