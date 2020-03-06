@@ -4,9 +4,6 @@ sc_zip_url=$cloudtest_url/downloads/scommand/scommand.zip
 wget --no-check-certificate --no-verbose -O scommand.zip $sc_zip_url
 unzip ./scommand.zip
 
-#Obtain the current time and converts to UTC to set the start load test variable
-start_test=$(date "+%Y-%m-%d %H:%M:%S %Z")
-
 #Send the custom annotation event to dynatrace for L&P Test Start
 DYNATRACE_BASE_URL="$1"
 DYNATRACE_API_TOKEN="$2"
@@ -17,6 +14,10 @@ AZ_RELEASE_DEFINITION_NAME=$5
 AZ_RELEASE_NAME=$6
 
 TAG_STRUCTURE=$(echo $TMP_TAG_STRUCTURE|jq '.')
+
+#Obtain the current time and converts to UTC to set the start load test variable
+start_test=$(TZ=UTC+5 date "+%Y-%m-%d %H:%M:%S")
+start_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
 
 echo "================================================================="
 echo "Dynatrace Custom Annotation Event:"
@@ -56,7 +57,8 @@ curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Autho
 Sleep 60
 
 #Obtain the current time and converts to UTC to set the end load test variable
-end_test=$(date "+%Y-%m-%d %H:%M:%S %Z")
+end_test=$(TZ=UTC+5 date "+%Y-%m-%d %H:%M:%S")
+end_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
 
 #Send the custom annotation event to dynatrace for L&P Test End
 echo "================================================================="
@@ -85,7 +87,7 @@ POST_DATA=$(cat <<EOF
                 ]
                 },"customProperties" :
                 {        "Script Path" : "$SCRIPT",
-                         "Start Load Test" : "$end_test"
+                         "End Load Test" : "$end_test"
                     }
     }
 EOF
