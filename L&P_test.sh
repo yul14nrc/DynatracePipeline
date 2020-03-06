@@ -10,8 +10,10 @@ DYNATRACE_API_TOKEN="$2"
 DYNATRACE_API_URL="$1/api/v1/events"
 TMP_TAG_STRUCTURE=$3
 SCRIPT=$4
-AZ_RELEASE_DEFINITION_NAME=$5
-AZ_RELEASE_NAME=$6
+CLOUDTEST_USERNAME=$5
+CLOUDTEST_PASSWORD=$6
+AZ_RELEASE_DEFINITION_NAME=$7
+AZ_RELEASE_NAME=$8
 
 TAG_STRUCTURE=$(echo $TMP_TAG_STRUCTURE|jq '.')
 
@@ -54,7 +56,37 @@ echo $POST_DATA
 curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
 
 #start load test
-Sleep 60
+echo "================================================================="
+echo "Load and Performance information:"
+echo ""
+echo "SCRIPT                     = $SCRIPT"
+echo "CLOUDTEST URL              = $cloudtest_url"
+echo "CLOUDTEST USERNAME         = $CLOUDTEST_USERNAME"
+echo "CLOUDTEST PASSWORD         = $CLOUDTEST_PASSWORD"
+echo "================================================================="
+
+echo ""
+echo "Executing L&P Test..."
+loadtest=$(./\scommand/\bin/\scommand cmd=play name="$SCRIPT" username="$CLOUDTEST_USERNAME" password="$CLOUDTEST_PASSWORD" url="$cloudtest_url" wait)
+echo ""
+if [[ $loadtest = *"status Completed"* ]]; then
+        echo "L&P Test finished"
+        echo ""
+        if [[ $loadtest = *"errors: 0"* ]]; then
+                echo "The L&P Test finished without errors:"
+                loadtest_result=$(echo $loadtest | sed -n 's/.*\.\.\. \(.*\)/\1/p')
+                echo $loadtest_result
+        else
+                echo "The L&P Test finished with errors:"
+                echo $loadtest
+                exit 1
+        fi
+else
+        echo "Error executing L&P Test"
+        echo ""
+        echo $loadtest
+        exit 1
+fi
 
 #Obtain the current time and converts to UTC to set the end load test variable
 end_test=$(TZ=UTC+5 date "+%Y-%m-%d %H:%M:%S")
