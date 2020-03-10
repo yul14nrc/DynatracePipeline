@@ -1,13 +1,5 @@
 #Script that sends start evaluation to keptn and loops until evaluation it's done. Later sends custom info event to dynatrace service with the details of the quality gate result.
 
-echo "Start load test"
-echo "$STARTLPTEST"
-echo "$(STARTLPTEST)"
-echo ""
-echo "End load test"
-echo "$(ENDLPTEST)"
-echo "$ENDLPTEST"
-
 DYNATRACE_BASE_URL="$1"
 DYNATRACE_API_TOKEN="$2"
 DYNATRACE_API_URL="$1/api/v1/events"
@@ -25,10 +17,6 @@ TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
 AZ_RELEASE_DEFINITION_NAME=$9
 AZ_RELEASE_NAME=${10}
-
-echo "Valores de fecha nuevos"
-echo "$start"
-echo "$end"
 
 echo ""
 echo "================================================================="
