@@ -130,7 +130,7 @@ echo $POST_DATA
 curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
 
 echo "Start load test"
-echo "$(start_test_utc)"
+echo "$(startLPTest)"
 echo ""
 echo "End load test"
 echo "$(endLPTest)"
