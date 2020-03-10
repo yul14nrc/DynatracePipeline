@@ -2,8 +2,10 @@
 
 echo "Start load test"
 echo "$startLPTest"
+echo "$(startLPTest)"
 echo ""
 echo "End load test"
+echo "$(endLPTest)"
 echo "$endLPTest"
 
 DYNATRACE_BASE_URL="$1"
