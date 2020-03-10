@@ -1,5 +1,11 @@
 #Script that sends start evaluation to keptn and loops until evaluation it's done. Later sends custom info event to dynatrace service with the details of the quality gate result.
 
+echo "Start load test"
+echo "$(startLPTest)"
+echo ""
+echo "End load test"
+echo "$(endLPTest)"
+
 DYNATRACE_BASE_URL="$1"
 DYNATRACE_API_TOKEN="$2"
 DYNATRACE_API_URL="$1/api/v1/events"
@@ -7,8 +13,8 @@ DYNATRACE_API_URL="$1/api/v1/events"
 keptnApiUrl=$3        # e.g. https://api.keptn.<YOUR VALUE>.xip.io
 keptnApiToken=$4
 TmpTagStructure=$5
-start=$6              # e.g. 2019-11-21T11:00:00.000Z
-end=$7                # e.g. 2019-11-21T11:00:10.000Z
+start=$(echo $startLPTest)              # e.g. 2019-11-21T11:00:00.000Z
+end=$(echo $endLPTest)                # e.g. 2019-11-21T11:00:10.000Z
 project=$8            # e.g. keptnorders
 service=$9            # e.g. frontend
 stage=${10}           # e.g. staging
@@ -17,6 +23,10 @@ TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
 AZ_RELEASE_DEFINITION_NAME=${11}
 AZ_RELEASE_NAME=${12}
+
+echo "Valores de fecha nuevos"
+echo "$(start)"
+echo "$(end)"
 
 echo ""
 echo "================================================================="
