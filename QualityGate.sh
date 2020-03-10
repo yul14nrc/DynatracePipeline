@@ -13,8 +13,8 @@ DYNATRACE_API_URL="$1/api/v1/events"
 keptnApiUrl=$3        # e.g. https://api.keptn.<YOUR VALUE>.xip.io
 keptnApiToken=$4
 TmpTagStructure=$5
-start=$(echo $startLPTest)              # e.g. 2019-11-21T11:00:00.000Z
-end=$(echo $endLPTest)                # e.g. 2019-11-21T11:00:10.000Z
+start=$(echo $(startLPTest))              # e.g. 2019-11-21T11:00:00.000Z
+end=$(echo $(endLPTest))                # e.g. 2019-11-21T11:00:10.000Z
 project=$6            # e.g. keptnorders
 service=$7            # e.g. frontend
 stage=$8           # e.g. staging
@@ -25,8 +25,8 @@ AZ_RELEASE_DEFINITION_NAME=$9
 AZ_RELEASE_NAME=${10}
 
 echo "Valores de fecha nuevos"
-echo "$(start)"
-echo "$(end)"
+echo "$start"
+echo "$end"
 
 echo ""
 echo "================================================================="
