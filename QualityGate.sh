@@ -15,14 +15,14 @@ keptnApiToken=$4
 TmpTagStructure=$5
 start=$(echo $startLPTest)              # e.g. 2019-11-21T11:00:00.000Z
 end=$(echo $endLPTest)                # e.g. 2019-11-21T11:00:10.000Z
-project=$8            # e.g. keptnorders
-service=$9            # e.g. frontend
-stage=${10}           # e.g. staging
+project=$6            # e.g. keptnorders
+service=$7            # e.g. frontend
+stage=$8           # e.g. staging
 
 TAG_STRUCTURE=$(echo $TmpTagStructure|jq '.')
 
-AZ_RELEASE_DEFINITION_NAME=${11}
-AZ_RELEASE_NAME=${12}
+AZ_RELEASE_DEFINITION_NAME=$9
+AZ_RELEASE_NAME=${10}
 
 echo "Valores de fecha nuevos"
 echo "$(start)"
