@@ -20,7 +20,7 @@ TAG_STRUCTURE=$(echo $TMP_TAG_STRUCTURE|jq '.')
 #Obtain the current time and converts to UTC to set the start load test variable
 start_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
 start_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
-echo "##vso[task.setvariable variable=startLPTest;]$(start_test_utc)"
+echo "##vso[task.setvariable variable=startLPTest;]$start_test_utc"
 
 echo "================================================================="
 echo "Dynatrace Custom Annotation Event:"
@@ -92,7 +92,7 @@ fi
 #Obtain the current time and converts to UTC to set the end load test variable
 end_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
 end_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
-echo "##vso[task.setvariable variable=endLPTest;]$(end_test_utc)"
+echo "##vso[task.setvariable variable=endLPTest;]$end_test_utc"
 
 #Send the custom annotation event to dynatrace for L&P Test End
 echo "================================================================="
@@ -130,7 +130,7 @@ echo $POST_DATA
 curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
 
 echo "Start load test"
-echo "$(startLPTest)"
+echo "$startLPTest"
 echo ""
 echo "End load test"
-echo "$(endLPTest)"
+echo "$endLPTest"
