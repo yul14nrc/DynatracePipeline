@@ -19,7 +19,7 @@ TAG_STRUCTURE=$(echo $TMP_TAG_STRUCTURE|jq '.')
 
 #Obtain the current time and converts to UTC to set the start load test variable
 start_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
-start_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
+start_test_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "##vso[task.setvariable variable=STARTLPTEST]$start_test_utc"
 
 echo "================================================================="
@@ -92,7 +92,7 @@ fi
 
 #Obtain the current time and converts to UTC to set the end load test variable
 end_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
-end_test_utc=$(date -u "+%Y-%m-%dT%H:%M:%S,%3NZ")
+end_test_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "##vso[task.setvariable variable=ENDLPTEST]$end_test_utc"
 
 #Send the custom annotation event to dynatrace for L&P Test End
