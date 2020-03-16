@@ -20,6 +20,7 @@ TAG_STRUCTURE=$(echo $TMP_TAG_STRUCTURE|jq '.')
 #Obtain the current time and converts to UTC to set the start load test variable
 start_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
 start_test_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+startux="$(date -d "${start_test_utc}" +%s)000"
 echo "##vso[task.setvariable variable=STARTLPTEST]$start_test_utc"
 
 echo "================================================================="
@@ -31,6 +32,7 @@ echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
 echo "TAG_STRUCTURE              = $TMP_TAG_STRUCTURE"
 echo "SCRIPT                     = $SCRIPT"
 echo "START LOAD TEST            = $start_test"
+echo "timestamp                  = $startux"
 echo "================================================================="
 echo ""
 POST_DATA=$(cat <<EOF
@@ -54,7 +56,7 @@ POST_DATA=$(cat <<EOF
 EOF
 )
 echo $POST_DATA
-curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
+#curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
 
 #start load test
 echo ""
@@ -93,6 +95,7 @@ fi
 #Obtain the current time and converts to UTC to set the end load test variable
 end_test=$(TZ="EST5EDT" date "+%Y-%m-%d %H:%M:%S")
 end_test_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+endux="$(date -d "${end_test_utc}" +%s)000"
 echo "##vso[task.setvariable variable=ENDLPTEST]$end_test_utc"
 
 #Send the custom annotation event to dynatrace for L&P Test End
@@ -105,6 +108,7 @@ echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
 echo "TAG_STRUCTURE              = $TMP_TAG_STRUCTURE"
 echo "SCRIPT                     = $SCRIPT"
 echo "END LOAD TEST              = $end_test"
+echo "Timestamp                  = $endux"
 echo "================================================================="
 echo ""
 POST_DATA=$(cat <<EOF
@@ -113,6 +117,8 @@ POST_DATA=$(cat <<EOF
         "annotationType" : "L&P Test End for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
         "annotationDescription": "L&P Test End for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
         "source" : "$cloudtest_url",
+        "start" : "$startux",
+        "end" : "$endux",
         "attachRules" : {
             "tagRule" : [
                 {
