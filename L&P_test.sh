@@ -23,41 +23,6 @@ start_test_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 startux="$(date -d "${start_test_utc}" +%s)000"
 echo "##vso[task.setvariable variable=STARTLPTEST]$start_test_utc"
 
-echo "================================================================="
-echo "Dynatrace Custom Annotation Event:"
-echo ""
-echo "DYNATRACE_BASE_URL         = $DYNATRACE_BASE_URL"
-echo "DYNATRACE_API_URL          = $DYNATRACE_API_URL"
-echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
-echo "TAG_STRUCTURE              = $TMP_TAG_STRUCTURE"
-echo "SCRIPT                     = $SCRIPT"
-echo "START LOAD TEST            = $start_test"
-echo "timestamp                  = $startux"
-echo "================================================================="
-echo ""
-POST_DATA=$(cat <<EOF
-    {
-        "eventType" : "CUSTOM_ANNOTATION",
-        "annotationType" : "L&P Test Start for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
-        "annotationDescription": "L&P Test Start for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
-        "source" : "$cloudtest_url",
-        "attachRules" : {
-            "tagRule" : [
-                {
-                    "meTypes":"SERVICE" ,
-                    "tags" :  $TAG_STRUCTURE
-                }
-                ]
-                },"customProperties" :
-                {        "Script Path" : "$SCRIPT",
-                         "Start Load Test" : "$start_test"
-                    }
-    }
-EOF
-)
-echo $POST_DATA
-#curl -s --url "$DYNATRACE_API_URL" -H "Content-type: application/json" -H "Authorization: Api-Token "$DYNATRACE_API_TOKEN -X POST -d "$POST_DATA"
-
 #start load test
 echo ""
 echo "================================================================="
@@ -107,15 +72,15 @@ echo "DYNATRACE_API_URL          = $DYNATRACE_API_URL"
 echo "DYNATRACE_API_TOKEN        = $DYNATRACE_API_TOKEN"
 echo "TAG_STRUCTURE              = $TMP_TAG_STRUCTURE"
 echo "SCRIPT                     = $SCRIPT"
+echo "START LOAD TEST            = $start_test"
 echo "END LOAD TEST              = $end_test"
-echo "Timestamp                  = $endux"
 echo "================================================================="
 echo ""
 POST_DATA=$(cat <<EOF
     {
         "eventType" : "CUSTOM_ANNOTATION",
-        "annotationType" : "L&P Test End for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
-        "annotationDescription": "L&P Test End for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
+        "annotationType" : "L&P Test for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
+        "annotationDescription": "L&P Test for $AZ_RELEASE_DEFINITION_NAME $AZ_RELEASE_NAME",
         "source" : "$cloudtest_url",
         "start" : "$startux",
         "end" : "$endux",
@@ -127,8 +92,7 @@ POST_DATA=$(cat <<EOF
                 }
                 ]
                 },"customProperties" :
-                {        "Script Path" : "$SCRIPT",
-                         "End Load Test" : "$end_test"
+                {        "Script Path" : "$SCRIPT"
                     }
     }
 EOF
