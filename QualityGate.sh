@@ -50,9 +50,9 @@ echo "Sending start Keptn Evaluation"
 ctxid=$(curl -s -k -X POST --url "${keptnApiUrl}/v1/event" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
 echo "keptnContext ID = $ctxid"
 echo ""
-if [ -z "$ctxid" ]
+if [ -z "$ctxid" ] | [ "$ctxid" = "null" ]
 then
-        echo "keptnContext ID is empty. There is a problem with the start evaluation curl command"
+        echo "keptnContext ID is empty. There is a problem with the start evaluation curl command or Keptn API Endpoint"
         exit 1
 else
         echo "keptnContext ID is not empty"
