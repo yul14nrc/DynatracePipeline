@@ -41,14 +41,14 @@ POST_DATA=$(cat <<EOF
     "stage": "$stage",
     "teststrategy": "manual"
   },
+  "source": "curl",
   "type": "sh.keptn.event.start-evaluation"
 }
 EOF
 )
 
 echo "Sending start Keptn Evaluation"
-#ctxid=$(curl -s -k -X POST --url "${keptnApiUrl}/v1/event" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
-ctxid=$(curl -X POST "${keptnApiUrl}/v1/event" -H "accept: application/json" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
+ctxid=$(curl -s -k -X POST --url "${keptnApiUrl}/v1/event" -H "Content-type: application/json" -H "x-token: ${keptnApiToken}" -d "$POST_DATA"|jq -r ".keptnContext")
 echo "keptnContext ID = $ctxid"
 echo ""
 if [ -z "$ctxid" ] | [ "$ctxid" = "null" ]
